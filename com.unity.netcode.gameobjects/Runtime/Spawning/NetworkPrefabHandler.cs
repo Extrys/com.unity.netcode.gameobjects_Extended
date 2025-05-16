@@ -126,7 +126,7 @@ namespace Unity.Netcode
         }
         public void SetInstantiationData<T>(NetworkObject networkObject, T data) where T : struct, INetworkSerializable
         {
-            if (!TryGetInstantiator(networkObject.GlobalObjectIdHash, out var prefabHandler) || !prefabHandler.HandlesDataOfType<T>())
+            if (!TryGetHandlerAdapter(networkObject.GlobalObjectIdHash, out var prefabHandler) || !prefabHandler.HandlesDataOfType<T>())
             {
                 throw new Exception("[InstantiationData] Cannot inject data: no compatible handler found for the specified data type.");
             }
@@ -270,7 +270,7 @@ namespace Unity.Netcode
         /// <param name="objectHash"></param>
         /// <param name="handler"></param>
         /// <returns></returns>
-        internal bool TryGetInstantiator(uint objectHash, out INetworkPrefabInstanceHandlerAdapter handler)
+        internal bool TryGetHandlerAdapter(uint objectHash, out INetworkPrefabInstanceHandlerAdapter handler)
         {
             return m_PrefabAssetToPrefabHandler.TryGetValue(objectHash, out handler);
         }
@@ -283,7 +283,7 @@ namespace Unity.Netcode
         /// <param name="serializer"></param>
         internal FastBufferReader GetInstantiationDataReader<T>(uint objectHash, ref BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            if (!serializer.IsReader || !TryGetInstantiator(objectHash, out INetworkPrefabInstanceHandlerAdapter synchronizableHandler))
+            if (!serializer.IsReader || !TryGetHandlerAdapter(objectHash, out INetworkPrefabInstanceHandlerAdapter synchronizableHandler))
             {
                 return default;
             }
