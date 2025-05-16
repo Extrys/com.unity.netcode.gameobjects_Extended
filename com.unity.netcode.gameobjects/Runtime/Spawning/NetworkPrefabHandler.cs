@@ -119,12 +119,12 @@ namespace Unity.Netcode
             return false;
         }
 
-        public void InjectInstantiationData<T>(GameObject gameObject, T instantiationData) where T : struct, INetworkSerializable
+        public void SetInstantiationData<T>(GameObject gameObject, T instantiationData) where T : struct, INetworkSerializable
         {
             if (gameObject.TryGetComponent<NetworkObject>(out var networkObject))
-                InjectInstantiationData(networkObject,instantiationData);
+                SetInstantiationData(networkObject,instantiationData);
         }
-        public void InjectInstantiationData<T>(NetworkObject networkObject, T data) where T : struct, INetworkSerializable
+        public void SetInstantiationData<T>(NetworkObject networkObject, T data) where T : struct, INetworkSerializable
         {
             if (!TryGetInstantiator(networkObject.GlobalObjectIdHash, out var prefabHandler) || !prefabHandler.HandlesDataOfType<T>())
             {
